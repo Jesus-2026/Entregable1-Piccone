@@ -1,20 +1,13 @@
 //🏥 Calculadora de Índice de Masa Corporal (IMC)
-//Simulador para calcular el IMC y determinar el estado de salud según el peso y altura
 
-/* El simulador debe:
-1- Mostrar un mensaje de bienvenida
-2- Solicitar datos al usuario:
-   2a- Pedir peso en kilogramos
-   2b- Pedir altura en metros
-3- Calcular el IMC con la fórmula: peso / (altura × altura)
-4- Determinar la categoría según el resultado:
-   a- Bajo peso: IMC menor a 18.5
-   b- Peso normal: IMC entre 18.5 y 24.9
-   c- Sobrepeso: IMC entre 25 y 29.9
-   d- Obesidad: IMC mayor o igual a 30
-5- Mostrar el resultado en consola y con alert
-6- Preguntar si desea realizar otro cálculo
-7- Al finalizar mostrar mensaje de despedida
+
+
+/* Simulador web de cálculo de IMC que procesa datos de múltiples 
+personas (nombre, peso, altura), determina su índice de masa 
+corporal, clasifica su categoría de salud y almacena los resultados
+ en localStorage. Desarrollado con HTML, CSS y JavaScript, 
+ implementando manipulación del DOM, arrays de objetos
+ y almacenamiento local para simular persistencia de datos.
 */
 
 
@@ -25,11 +18,18 @@ const pesoNormal = 25;
 const sobrePeso = 29.9;
 const obesidad = 30;
 
-function pedirDatos(){
 
-    let peso = parseFloat(prompt("Ingresa  tu peso en Kg (ej: 70,5)"));
-    let altura = parseFloat(prompt( "Ingresa  tu altura en M metros (ej: 1.75)"));
-    return{ peso, altura};
+
+// ARRAY para guardar todas las personas en localstorage
+let personas = JSON.parse(localStorage.getItem('personas')) || [];
+
+
+
+function pedirDatos(){
+    let nombre = document.getElementById('inputNombre').value;
+    let peso = parseFloat(document.getElementById('inputPeso').value);
+    let altura = parseFloat(document.getElementById('inputAltura').value);
+    return {nombre, peso, altura};
 }
 
 function calcularIMC(peso, altura){
@@ -50,29 +50,47 @@ function determinarCategoria(imc){
 
 }
 
+const formulario = document.getElementById('formularioIMC');
 
-alert("🏥 Bienvenido a la calculadora de IMC");
-
-let continuar; 
-
-do{
+formulario.addEventListener('submit', function(evento) {
+    evento.preventDefault(); // Evita que la página se recargue
+    
+    // 1. Obtener datos del formulario
     let datos = pedirDatos();
-
+    
+    // 2. Calcular IMC
     let resultadoIMC = calcularIMC(datos.peso, datos.altura);
-  
+    
+    // 3. Determinar categoría
     let categoria = determinarCategoria(resultadoIMC);
+    
+    let persona = {
+        nombre: datos.nombre,
+        peso: datos.peso,
+        altura: datos.altura,
+        imc: resultadoIMC.toFixed(2),
+        categoria: categoria
+    };
 
-    console.log("--- Resultado ---");
-    console.log("Peso: " + datos.peso + " kg");
-    console.log("Altura: " + datos.altura + " m");
-    console.log("Tu IMC es: " + resultadoIMC.toFixed(2));
-    console.log("Categoría: " + categoria);
+    personas.push(persona);
 
-    alert("Tu IMC es: " + resultadoIMC.toFixed(2) + "\nCategoría: " + categoria);
+    localStorage.setItem('personas', JSON.stringify(personas));
 
-    continuar = confirm("¿Deseas calcular otro IMC?");
+    console.log("personasguardadas:", personas);    
+    
+    
+    //4. Mostrar resultado en la pagina
 
-} while(continuar);
+    let divResultado = document.getElementById('resultado');
+    divResultado.innerHTML = `
+        <div class="resultado">
+            <h3>Resultado:</h3>
+            <p><strong>Peso:</strong> ${datos.peso} kg</p>
+            <p><strong>Altura:</strong> ${datos.altura} m</p>
+            <p><strong>IMC:</strong> ${resultadoIMC.toFixed(2)} </p>
+            <p><strong>Categoria:</strong> ${categoria}</p>
+        </div>`;
 
-alert("👋 Gracias por usar la Calculadora de IMC. ¡Cuida tu salud!");
-console.log("=== Programa finalizado ===");
+
+ })
+

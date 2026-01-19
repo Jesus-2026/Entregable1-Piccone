@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora IMC</title>
     <link rel="stylesheet" href="../css/style.css">
 
 </head>
@@ -17,16 +17,28 @@
 <h1>Bienvenido!! Calculador Indice de Masa Corporal</h1>
 
 
-<p>Este simulador calcula el Índice de Masa Corporal (IMC) a partir de tu peso y altura. 
-El programa te pedirá los datos y te mostrará tu IMC y categoría de salud. 
-Abre la Consola (F12) para empezar.</p>
+<p>Ingresa peso y altura para calcular tu IMC.</p>
+
+<form id="formularioIMC">
+
+    <label>Nombre:</label>
+    <input type="text" id="inputNombre" placeholder="Indica tu nombre aquí">
+    <label>Peso (kg):</label>
+    <input type="number" id="inputPeso" placeholder="Ej: 70" step="0.1">
+    <label>Altura (m):</label>
+    <input type="number" id="inputAltura" placeholder="Ej: 1.75" step="0.01">
+
+    <button type="submit">Calcular IMC</button>
+
+</form>
+
+<div id="resultado"></div>
+
+
 
 
 <script src="../js/script.js"></script>
 </body>
-
-
-
 
 
 
